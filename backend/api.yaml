@@ -1,0 +1,245 @@
+openapi: "3.0.0"
+info:
+  title: TeaTimeSystem API Overview
+  version: 1.0.0
+paths:
+  /orders:
+    post:
+      tags:
+        - "發起人-新增訂單"
+      summary: "新增訂單"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/orders"            
+      responses:
+        '201':
+          description: create a new order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orders"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        '401':
+          description: Unauthoried
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthoried"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
+
+            
+  /restaurants/{restaurant_name}:
+    get:
+      tags:
+        - "發起人-搜尋相似餐廳"
+      description: ""
+      parameters:
+        - in: path
+          name: restaurant_name
+          schema: 
+            type: string
+          required: true
+      responses:
+        '200':
+          description: get the restaurant name by fuzzy search
+
+        # 補完responses
+
+  /orders/{invitation_code}:
+    get:
+      tags:
+        - "發起人/參與人-取得指定編號的訂單資訊"
+      parameters:
+        - in: path
+          name: invitation_code
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: get the infomation of the order with the invitation code
+
+  /order/{invitation_code}/{participant_id}:
+    post:
+      tags:
+        - "發起人/參與人-更新品項於訂單"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/orders"
+      responses:
+        '201':
+          description: create the item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orders"
+    put:
+      tags:
+        - "發起人/參與人-更新品項於訂單"
+      parameters:
+        - in: path
+          name: invitation_code
+          schema:
+            type: string
+          required: true
+          description: update the info of the item in specfic order
+      responses:
+        '200':
+          description: update the item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orders"
+
+  /orders/{orders_id}:
+    get:
+      tags:
+        - "發起人-取得指定訂單的邀請碼"
+      summary: Get the invitation code of the specfic order
+      description: ""
+      parameters:
+        - in: path
+          name: invitation_code
+          schema: 
+              type: string
+          required: true
+      responses:
+        '200':
+          description: get the invitation code in the specfic order
+
+components:
+  schemas:
+    restaurants:
+      type: object
+      properties:
+        _id: 
+          type: string
+        restaurantName:
+          type: string
+        restaurantURL:
+          type: string
+        restaurantMenu:
+          type: string
+      example:
+        restaurantName: "50嵐新竹光復店"
+        restaurantURL: "restaurant url..."
+        restauranMenu: ""
+      required:
+        - restaurantName
+        - restaurantURL
+    items:
+      type: object
+      properties: 
+        _id:
+          type: string
+        itemName:
+          type: string
+        itemPrice:
+          type: integer
+        itemNumber:
+          type: integer
+          default: 0
+        restaurantID:
+          type: string
+          $ref: "#/components/schemas/restaurants"
+      example:
+        itemName: "珍奶全糖全冰"
+        itemPrice: 90
+      required:
+        - itemName
+        - itemPrice        
+    orders:
+      type: object
+      properties:
+        _id: 
+          type: string
+        ownerID:
+          type: string
+        invitationCode:
+          type: string
+        authority:
+          type: boolean
+          default: false
+        closeTimestamp:
+          type: string
+        restaurantID:
+          type: string
+          $ref: "#/components/schemas/restaurants"
+        participant:
+          type: array
+          items:
+            type: object
+            properties:
+              participantID:
+                type: string
+              items:
+                type: array
+                $ref: "#/components/schemas/items"
+      required:
+        - ownerID
+        - invitationCode
+        - restaurantID
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+      required:
+        - code
+        - msg
+
+  responses:
+    BadRequest:
+      description: "Request is invaild"
+      content:
+        application/json:
+          schema:
+            $ref:  "#/components/schemas/Error"
+
+    Unauthoried:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+    NotFound:
+      description: "The specified resource was not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    
+    Internal Server Error:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
