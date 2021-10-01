@@ -1,5 +1,4 @@
 "use strict";
-// 導入相關的套件
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,20 +40,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startFastify = void 0;
-// FastifyInstance, FastifyReply, FastifyRequest 這三個是於套件定義的型態
-// 套件來自於 fastify
 var fastify_1 = __importDefault(require("fastify"));
-// 套件來自於自定義的 mongoose
 var mongoose_1 = require("./plugins/mongoose");
 var restaurant_1 = require("./routes/restaurant");
 var order_1 = require("./routes/order");
-// 我們定義 server 函式會執行 fastify套件的操作
-// 而後，我們把 server 這個函式 放到 startFastify 這個函式使用()
-// 換句話說，當我們執行 startFastify時，該函式會去執行一連串的 server 操作。
 var server = (0, fastify_1.default)({
     logger: { prettyPrint: true }
 });
-// 箭頭函式運算式（arrow function expression）
 var startFastify = function (port) {
     server.listen(port, function (err, _) {
         if (err) {

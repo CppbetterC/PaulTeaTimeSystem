@@ -47,10 +47,31 @@ var OrderRepoImpl = /** @class */ (function () {
     OrderRepoImpl.of = function () {
         return new OrderRepoImpl();
     };
+    OrderRepoImpl.prototype.getOrder = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.find()];
+            });
+        });
+    };
     OrderRepoImpl.prototype.addOrder = function (orderBody) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, order_1.default.create(orderBody)];
+            });
+        });
+    };
+    OrderRepoImpl.prototype.updateOrder = function (id, orderBody) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.findByIdAndUpdate(id, orderBody)];
+            });
+        });
+    };
+    OrderRepoImpl.prototype.deleteOrder = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.findByIdAndDelete(id)];
             });
         });
     };

@@ -2,7 +2,7 @@ import { IRestaurant } from '../types/restaurant'
 import Restaurant from '../models/restaurant'
 
 interface ResaturantRepo {
-  // Todo
+  addRestaurant(restaurantBody: IRestaurant): Promise<IRestaurant | null>
 }
 
 class RestaurantRepoImpl implements ResaturantRepo {
@@ -11,9 +11,10 @@ class RestaurantRepoImpl implements ResaturantRepo {
   static of(): RestaurantRepoImpl {
     return new RestaurantRepoImpl()
   }
-  
-  // Todo
-  
+
+  addRestaurant(restaurantBody: IRestaurant): Promise<IRestaurant | null>{
+    return Restaurant.create(restaurantBody)
+  }
 }
 
 export { RestaurantRepoImpl }

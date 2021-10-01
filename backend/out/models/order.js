@@ -11,7 +11,12 @@ var itemSchema = new mongoose_1.Schema({
         required: true
     },
     itemNumber: {
-        type: Number
+        type: Number,
+        default: 0
+    },
+    restaurantID: {
+        type: String,
+        required: true
     }
 });
 var participantSchema = new mongoose_1.Schema({
@@ -20,21 +25,23 @@ var participantSchema = new mongoose_1.Schema({
         required: true
     },
     items: {
-        type: itemSchema,
+        type: [itemSchema],
         required: true
     }
 });
+0;
 var orderSchema = new mongoose_1.Schema({
     ownerID: {
         type: String,
         required: true
     },
     invitationCode: {
-        type: String,
+        type: Number,
         required: true
     },
     authority: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     closeTimestamp: {
         type: String
@@ -44,8 +51,7 @@ var orderSchema = new mongoose_1.Schema({
         required: true
     },
     participant: {
-        type: participantSchema,
-        required: true
+        type: [participantSchema]
     }
 }, {
     timestamps: true

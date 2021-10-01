@@ -26,11 +26,11 @@ const participantSchema: Schema = new Schema({
     required: true
   },
   items: {
-    type: itemSchema,
+    type: [itemSchema],
     required: true
   }
 })
-
+0
 const orderSchema: Schema = new Schema(
   {
     ownerID: {
@@ -38,12 +38,12 @@ const orderSchema: Schema = new Schema(
       required: true
     },
     invitationCode: {
-      type: String,
+      type: Number,
       required: true
     },
     authority: {
       type: Boolean,
-      default: true
+      default: false
     },
     closeTimestamp: {
       type: String
@@ -53,7 +53,7 @@ const orderSchema: Schema = new Schema(
       required: true
     },
     participant: {
-      type: participantSchema,
+      type: [participantSchema]
     }
   },
   {

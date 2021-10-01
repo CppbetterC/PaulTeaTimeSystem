@@ -1,0 +1,85 @@
+{
+    "order": [
+      {
+        "_id": "61571e2721ba1456f0751bfe",
+        "ownerID": "123819",
+        "invitationCode": 113355,
+        "authority": false,
+        "closeTimestamp": "",
+        "restaurantID": "61548ab5d0401469f2627c4a",
+        "createdAt": "2021-10-01T14:41:43.970Z",
+        "updatedAt": "2021-10-01T14:41:43.970Z",
+        "__v": 0,
+        "participant": []
+      },
+      {
+        "_id": "61571f1d064f982fcbaef6ff",
+        "ownerID": "123819",
+        "invitationCode": 224466,
+        "authority": false,
+        "closeTimestamp": "",
+        "restaurantID": "61548ab5d0401469f2627c4a",
+        "createdAt": "2021-10-01T14:45:49.462Z",
+        "updatedAt": "2021-10-01T14:45:49.462Z",
+        "__v": 0,
+        "participant": []
+      },
+      {
+        "_id": "615723e87b5924656bc2c1d4",
+        "ownerID": "123819",
+        "invitationCode": 336699,
+        "authority": false,
+        "closeTimestamp": "",
+        "restaurantID": "61548ab5d0401469f2627c4a",
+        "participant": [
+          {
+            "PID": "123819",
+            "items": [],
+            "_id": "615723e87b5924656bc2c1d5"
+          }
+        ],
+        "createdAt": "2021-10-01T15:06:16.950Z",
+        "updatedAt": "2021-10-01T15:06:16.950Z",
+        "__v": 0
+      },
+      {
+        "_id": "6157248a7b5924656bc2c1df",
+        "ownerID": "123819",
+        "invitationCode": 336699,
+        "authority": false,
+        "closeTimestamp": "",
+        "restaurantID": "61548ab5d0401469f2627c4a",
+        "participant": [
+          {
+            "PID": "123819",
+            "items": [
+              {
+                "itemName": "多多綠半糖少冰",
+                "itemPrice": 200,
+                "itemNumber": 2,
+                "restaurantID": "61548ab5d0401469f2627c4a",
+                "_id": "6157248a7b5924656bc2c1e1"
+              }
+            ],
+            "_id": "6157248a7b5924656bc2c1e0"
+          },
+          {
+            "PID": "123819",
+            "items": [
+              {
+                "itemName": "多多綠半糖少冰",
+                "itemPrice": 200,
+                "itemNumber": 2,
+                "restaurantID": "61548ab5d0401469f2627c4a",
+                "_id": "6157248a7b5924656bc2c1e3"
+              }
+            ],
+            "_id": "6157248a7b5924656bc2c1e2"
+          }
+        ],
+        "createdAt": "2021-10-01T15:08:58.510Z",
+        "updatedAt": "2021-10-01T15:08:58.510Z",
+        "__v": 0
+      }
+    ]
+  }

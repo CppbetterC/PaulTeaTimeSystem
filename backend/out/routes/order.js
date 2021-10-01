@@ -39,24 +39,88 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderRouter = void 0;
 var order_repo_1 = require("./../repo/order-repo");
 var OrderRouter = function (server, opts, done) {
-    server.post('/orders', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
-        var orderRepo, orderBody, order, error_1;
+    var orderRepo = order_repo_1.OrderRepoImpl.of();
+    server.get('/orders', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var order, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    orderRepo = order_repo_1.OrderRepoImpl.of();
-                    _a.label = 1;
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, orderRepo.getOrder()];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    orderBody = request.body;
-                    return [4 /*yield*/, orderRepo.addOrder(orderBody)];
-                case 2:
                     order = _a.sent();
-                    return [2 /*return*/, reply.status(201).send({ order: order })];
-                case 3:
+                    return [2 /*return*/, reply.status(200).send({ order: order })];
+                case 2:
                     error_1 = _a.sent();
                     return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
-                case 4: return [2 /*return*/];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.post('/orders', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var orderBody, order, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    orderBody = request.body;
+                    return [4 /*yield*/, orderRepo.addOrder(orderBody)];
+                case 1:
+                    order = _a.sent();
+                    return [2 /*return*/, reply.status(201).send({ order: order })];
+                case 2:
+                    error_2 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.put('/orders/:id', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, orderBody, order, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    id = request.params.id;
+                    orderBody = request.body;
+                    return [4 /*yield*/, orderRepo.updateOrder(id, orderBody)];
+                case 1:
+                    order = _a.sent();
+                    if (order) {
+                        return [2 /*return*/, reply.status(200).send({ order: order })];
+                    }
+                    else {
+                        return [2 /*return*/, reply.status(404).send({ msg: "Order #" + id + " Not Found" })];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.delete('/orders/:id', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, order, error_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    id = request.params.id;
+                    return [4 /*yield*/, orderRepo.deleteOrder(id)];
+                case 1:
+                    order = _a.sent();
+                    if (order) {
+                        return [2 /*return*/, reply.status(200).send({ order: order })];
+                    }
+                    else {
+                        return [2 /*return*/, reply.status(404).send({ msg: "Order #" + id + " Not Found" })];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_4 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 3: return [2 /*return*/];
             }
         });
     }); });
