@@ -11,6 +11,7 @@ interface IdParams {
 
 const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: (error?: Error) => void) => {
   const orderRepo = OrderRepoImpl.of()
+  const restaurantRepo = RestaurantRepoImpl.of()
 
   server.get('/orders', async (request, reply) => {
     try {
@@ -23,7 +24,26 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
 
   server.post('/orders', async (request, reply) => {
     try {
-      const orderBody = request.body as IOrder
+      // (1) send restaurant info to db and get unique _id
+      const phase1 = request.body as IRestaurant
+      const restaurantBody: IRestaurant = {
+          "_id": undefined,
+          "restaurantName": phase1.restaurantName,
+          "restaurantURL": phase1.restaurantURL,
+          "restaurantMenu": phase1.restaurantMenu
+      }
+      const restaurant = await restaurantRepo.addRestaurant(restaurantBody)
+      
+      // (2) send order info to db 
+      const phase2 = request.body as IOrder
+      const orderBody: IOrder = {
+        "ownerID": phase2.ownerID,
+        "invitationCode": phase2.invitationCode,
+        "authority": phase2.authority,
+        "closeTimestamp": phase2.closeTimestamp,
+        "restaurantID": restaurant?._id || "",
+        "participant": phase2.participant
+      }
       const order = await orderRepo.addOrder(orderBody)
       return reply.status(201).send({ order })
     } catch (error) {

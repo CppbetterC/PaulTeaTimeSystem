@@ -15,7 +15,8 @@ var itemSchema = new mongoose_1.Schema({
         default: 0
     },
     restaurantID: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Restaurant',
         required: true
     }
 });
@@ -47,7 +48,8 @@ var orderSchema = new mongoose_1.Schema({
         type: String
     },
     restaurantID: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Restaurant',
         required: true
     },
     participant: {

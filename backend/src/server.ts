@@ -24,10 +24,10 @@ const startFastify: (port: number) => FastifyInstance<Server, IncomingMessage, S
   })
 
   // Restaurant Router
-  server.register(RestaurantRouter, { prefix: '/api' })
+  server.register(RestaurantRouter, { prefix: '/api/v1' })
 
   // Order Router
-  server.register(OrderRouter, { prefix: '/api' })
+  server.register(OrderRouter, { prefix: '/api/v1' })
 
   return server
 }

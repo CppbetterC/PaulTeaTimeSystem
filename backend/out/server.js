@@ -60,9 +60,9 @@ var startFastify = function (port) {
         });
     }); });
     // Restaurant Router
-    server.register(restaurant_1.RestaurantRouter, { prefix: '/api' });
+    server.register(restaurant_1.RestaurantRouter, { prefix: '/api/v1' });
     // Order Router
-    server.register(order_1.OrderRouter, { prefix: '/api' });
+    server.register(order_1.OrderRouter, { prefix: '/api/v1' });
     return server;
 };
 exports.startFastify = startFastify;

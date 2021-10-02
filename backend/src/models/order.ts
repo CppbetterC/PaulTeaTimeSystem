@@ -15,7 +15,8 @@ const itemSchema: Schema = new Schema({
     default: 0
   },
   restaurantID: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'Restaurant',
     required: true
   }
 })
@@ -49,7 +50,8 @@ const orderSchema: Schema = new Schema(
       type: String
     },
     restaurantID: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'Restaurant',
       required: true
     },
     participant: {

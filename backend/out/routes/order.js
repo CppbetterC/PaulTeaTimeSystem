@@ -38,8 +38,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderRouter = void 0;
 var order_repo_1 = require("./../repo/order-repo");
+var restaurant_repo_1 = require("./../repo/restaurant-repo");
 var OrderRouter = function (server, opts, done) {
     var orderRepo = order_repo_1.OrderRepoImpl.of();
+    var restaurantRepo = restaurant_repo_1.RestaurantRepoImpl.of();
     server.get('/orders', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
         var order, error_1;
         return __generator(this, function (_a) {
@@ -58,20 +60,40 @@ var OrderRouter = function (server, opts, done) {
         });
     }); });
     server.post('/orders', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
-        var orderBody, order, error_2;
+        var phase1, restaurantBody, restaurant, phase2, orderBody, order, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    orderBody = request.body;
-                    return [4 /*yield*/, orderRepo.addOrder(orderBody)];
+                    _a.trys.push([0, 3, , 4]);
+                    phase1 = request.body;
+                    restaurantBody = {
+                        "_id": undefined,
+                        "restaurantName": phase1.restaurantName,
+                        "restaurantURL": phase1.restaurantURL,
+                        "restaurantMenu": phase1.restaurantMenu
+                    };
+                    return [4 /*yield*/, restaurantRepo.addRestaurant(restaurantBody)
+                        // (2) send order info to db 
+                    ];
                 case 1:
+                    restaurant = _a.sent();
+                    phase2 = request.body;
+                    orderBody = {
+                        "ownerID": phase2.ownerID,
+                        "invitationCode": phase2.invitationCode,
+                        "authority": phase2.authority,
+                        "closeTimestamp": phase2.closeTimestamp,
+                        "restaurantID": (restaurant === null || restaurant === void 0 ? void 0 : restaurant._id) || "",
+                        "participant": phase2.participant
+                    };
+                    return [4 /*yield*/, orderRepo.addOrder(orderBody)];
+                case 2:
                     order = _a.sent();
                     return [2 /*return*/, reply.status(201).send({ order: order })];
-                case 2:
+                case 3:
                     error_2 = _a.sent();
                     return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
-                case 3: return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
         });
     }); });
