@@ -82,6 +82,13 @@ var OrderRepoImpl = /** @class */ (function () {
             });
         });
     };
+    OrderRepoImpl.prototype.getSpecificOrderByInvitationCode = function (code) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.findOne({ invitationCode: Number(code) })];
+            });
+        });
+    };
     return OrderRepoImpl;
 }());
 exports.OrderRepoImpl = OrderRepoImpl;

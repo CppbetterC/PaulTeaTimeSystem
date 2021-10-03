@@ -157,7 +157,7 @@ var OrderRouter = function (server, opts, done) {
                 case 1:
                     order = _a.sent();
                     if (order) {
-                        return [2 /*return*/, reply.status(200).send({ "invitationCode": order.invitationCode.toString() })];
+                        return [2 /*return*/, reply.status(200).send({ invitationCode: order.invitationCode.toString() })];
                     }
                     else {
                         return [2 /*return*/, reply.status(404).send({ msg: "Order #" + id + " Not Found" })];
@@ -165,6 +165,30 @@ var OrderRouter = function (server, opts, done) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_5 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.get('/orders/search/:code', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var code, order, error_6;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    code = request.params.code;
+                    return [4 /*yield*/, orderRepo.getSpecificOrderByInvitationCode(code)];
+                case 1:
+                    order = _a.sent();
+                    if (order) {
+                        return [2 /*return*/, reply.status(200).send(order)];
+                    }
+                    else {
+                        return [2 /*return*/, reply.status(404).send({ msg: "Order #" + code + " Not Found" })];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_6 = _a.sent();
                     return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
                 case 3: return [2 /*return*/];
             }

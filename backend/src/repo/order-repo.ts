@@ -16,6 +16,9 @@ interface OrderRepo {
 
   // 根據訂單_id來取得資訊
   getSpecificOrder(id: String): Promise<IOrder | null>
+
+  // 根據邀請碼 invitationCode 來取得資訊
+  getSpecificOrderByInvtationCode(code: String): Promise<IOrder | null>
 }
 
 class OrderRepoImpl implements OrderRepo {
@@ -43,6 +46,10 @@ class OrderRepoImpl implements OrderRepo {
 
   async getSpecificOrder(id: String): Promise<IOrder | null> {
     return Order.findById(id)
+  }
+
+  async getSpecificOrderByInvitationCode(code: String): Promise<IOrder | null> {
+    return Order.findOne({ invitationCode: Number(code) })
   }
 }
 

@@ -16,8 +16,8 @@ var itemSchema = new mongoose_1.Schema({
     },
     restaurantID: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Restaurant',
-        // 假如這邊要設定為 required 的話 
+        ref: 'Restaurant'
+        // 假如這邊要設定為 required 的話
         // 我們需要知道怎麼去抓到 restaurantID
         // required: true
     }
@@ -40,7 +40,9 @@ var orderSchema = new mongoose_1.Schema({
     },
     invitationCode: {
         type: Number,
+        // default: ,
         required: true
+        // 如何確定這個 invitationCode 不會重複
     },
     authority: {
         type: Boolean,

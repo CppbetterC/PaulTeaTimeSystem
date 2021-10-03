@@ -2,12 +2,10 @@ import { FastifyInstance, RouteShorthandOptions, FastifyReply } from 'fastify'
 import { request } from 'http'
 import { IOrder } from '../types/order'
 import { IRestaurant } from '../types/restaurant'
+import { IdParams } from '../types/id'
+import { IInvitationCodeParams } from '../types/invitation-code'
 import { OrderRepoImpl } from './../repo/order-repo'
 import { RestaurantRepoImpl } from './../repo/restaurant-repo'
-
-interface IdParams {
-  id: String
-}
 
 const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: (error?: Error) => void) => {
   const orderRepo = OrderRepoImpl.of()
@@ -85,9 +83,24 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       const id = request.params.id
       const order = await orderRepo.getSpecificOrder(id)
       if (order) {
-        return reply.status(200).send({ "invitationCode": order.invitationCode.toString() })
+        return reply.status(200).send({ invitationCode: order.invitationCode.toString() })
       } else {
         return reply.status(404).send({ msg: `Order #${id} Not Found` })
+      }
+    } catch (error) {
+      return reply.status(500).send({ msg: 'Internal Server Error' })
+    }
+  })
+
+  server.get<{ Params: IInvitationCodeParams }>('/orders/search/:code', async (request, reply) => {
+    try {
+      // return reply.send({"msg": "fuck you"})
+      const code = request.params.code
+      const order = await orderRepo.getSpecificOrderByInvitationCode(code)
+      if (order) {
+        return reply.status(200).send(order)
+      } else {
+        return reply.status(404).send({ msg: `Order #${code} Not Found` })
       }
     } catch (error) {
       return reply.status(500).send({ msg: 'Internal Server Error' })

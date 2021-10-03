@@ -65,7 +65,7 @@ paths:
 
         # 補完responses
 
-  /orders/{invitation_code}:
+  /orders/search/{invitation_code}:
     get:
       tags:
         - "發起人/參與人-取得指定編號的訂單資訊"
@@ -79,7 +79,7 @@ paths:
         '200':
           description: get the infomation of the order with the invitation code
 
-  /order/{invitation_code}/{participant_id}:
+  /order/search/{invitation_code}/{participant_id}:
     post:
       tags:
         - "發起人/參與人-更新品項於訂單"

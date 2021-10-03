@@ -16,8 +16,8 @@ const itemSchema: Schema = new Schema({
   },
   restaurantID: {
     type: Schema.Types.ObjectId,
-    ref: 'Restaurant',
-    // 假如這邊要設定為 required 的話 
+    ref: 'Restaurant'
+    // 假如這邊要設定為 required 的話
     // 我們需要知道怎麼去抓到 restaurantID
     // required: true
   }
@@ -42,7 +42,9 @@ const orderSchema: Schema = new Schema(
     },
     invitationCode: {
       type: Number,
+      // default: ,
       required: true
+      // 如何確定這個 invitationCode 不會重複
     },
     authority: {
       type: Boolean,
