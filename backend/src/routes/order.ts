@@ -85,7 +85,7 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       const id = request.params.id
       const order = await orderRepo.getSpecificOrder(id)
       if (order) {
-        return reply.status(200).send({ order })
+        return reply.status(200).send({ "invitationCode": order.invitationCode.toString() })
       } else {
         return reply.status(404).send({ msg: `Order #${id} Not Found` })
       }

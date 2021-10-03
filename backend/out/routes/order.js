@@ -157,7 +157,7 @@ var OrderRouter = function (server, opts, done) {
                 case 1:
                     order = _a.sent();
                     if (order) {
-                        return [2 /*return*/, reply.status(200).send({ order: order })];
+                        return [2 /*return*/, reply.status(200).send({ "invitationCode": order.invitationCode.toString() })];
                     }
                     else {
                         return [2 /*return*/, reply.status(404).send({ msg: "Order #" + id + " Not Found" })];
