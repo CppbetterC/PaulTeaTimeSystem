@@ -17,7 +17,9 @@ var itemSchema = new mongoose_1.Schema({
     restaurantID: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Restaurant',
-        required: true
+        // 假如這邊要設定為 required 的話 
+        // 我們需要知道怎麼去抓到 restaurantID
+        // required: true
     }
 });
 var participantSchema = new mongoose_1.Schema({

@@ -17,7 +17,9 @@ const itemSchema: Schema = new Schema({
   restaurantID: {
     type: Schema.Types.ObjectId,
     ref: 'Restaurant',
-    required: true
+    // 假如這邊要設定為 required 的話 
+    // 我們需要知道怎麼去抓到 restaurantID
+    // required: true
   }
 })
 
