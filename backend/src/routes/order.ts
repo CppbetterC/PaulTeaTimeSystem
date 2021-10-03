@@ -3,9 +3,10 @@ import { request } from 'http'
 import { IOrder } from '../types/order'
 import { IRestaurant } from '../types/restaurant'
 import { IdParams } from '../types/id'
-import { IInvitationCodeParams } from '../types/invitation-code'
+import { IItem } from '../types/item'
 import { OrderRepoImpl } from './../repo/order-repo'
 import { RestaurantRepoImpl } from './../repo/restaurant-repo'
+import { IParticipant } from '../types/participant'
 
 const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: (error?: Error) => void) => {
   const orderRepo = OrderRepoImpl.of()
@@ -35,8 +36,9 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       // (2) send order info to db
       const phase2 = request.body as IOrder
       const orderBody: IOrder = {
+        _id: phase2._id,
         ownerID: phase2.ownerID,
-        invitationCode: phase2.invitationCode,
+        invitationCode: Math.floor(Math.random() * 100000) + 1,
         authority: phase2.authority,
         closeTimestamp: phase2.closeTimestamp,
         restaurantID: restaurant?._id || '',
@@ -92,9 +94,8 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
     }
   })
 
-  server.get<{ Params: IInvitationCodeParams }>('/orders/search/:code', async (request, reply) => {
+  server.get<{ Params: IdParams }>('/orders/search/:code', async (request, reply) => {
     try {
-      // return reply.send({"msg": "fuck you"})
       const code = request.params.code
       const order = await orderRepo.getSpecificOrderByInvitationCode(code)
       if (order) {
@@ -102,6 +103,24 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       } else {
         return reply.status(404).send({ msg: `Order #${code} Not Found` })
       }
+    } catch (error) {
+      return reply.status(500).send({ msg: 'Internal Server Error' })
+    }
+  })
+
+  server.post<{ Params: IdParams }>('/orders/search/:code/:pid', async (request, reply) => {
+    try {
+      const code = request.params.code
+      const order = await orderRepo.getSpecificOrderByInvitationCode(code)
+      const pid = request.params.pid
+      const participantBody: IParticipant = { 
+        PID: pid.toString(), items: request.body as IItem 
+      }
+      if (order?._id !== undefined) {
+        const updatedOrder = await orderRepo.addParticipantItem(order._id, participantBody)
+        return reply.status(201).send({ updatedOrder })
+      }
+
     } catch (error) {
       return reply.status(500).send({ msg: 'Internal Server Error' })
     }

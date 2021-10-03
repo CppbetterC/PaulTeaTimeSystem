@@ -4,6 +4,7 @@ var mongoose_1 = require("mongoose");
 var restaurantSchema = new mongoose_1.Schema({
     restaurantName: {
         type: String,
+        unique: true,
         required: true
     },
     restaurantURL: {

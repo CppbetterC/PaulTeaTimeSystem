@@ -5,6 +5,7 @@ const restaurantSchema: Schema = new Schema(
   {
     restaurantName: {
       type: String,
+      unique: true,
       required: true
     },
     restaurantURL: {

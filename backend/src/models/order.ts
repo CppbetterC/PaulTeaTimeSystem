@@ -42,9 +42,8 @@ const orderSchema: Schema = new Schema(
     },
     invitationCode: {
       type: Number,
-      // default: ,
+      unique: true,
       required: true
-      // 如何確定這個 invitationCode 不會重複
     },
     authority: {
       type: Boolean,

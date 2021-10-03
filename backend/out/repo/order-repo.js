@@ -89,6 +89,21 @@ var OrderRepoImpl = /** @class */ (function () {
             });
         });
     };
+    OrderRepoImpl.prototype.addParticipantItem = function (id, participantBody) {
+        return __awaiter(this, void 0, void 0, function () {
+            var order;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, order_1.default.findById(id)];
+                    case 1:
+                        order = _a.sent();
+                        order === null || order === void 0 ? void 0 : order.participant.push(participantBody);
+                        order === null || order === void 0 ? void 0 : order.save();
+                        return [2 /*return*/, order];
+                }
+            });
+        });
+    };
     return OrderRepoImpl;
 }());
 exports.OrderRepoImpl = OrderRepoImpl;

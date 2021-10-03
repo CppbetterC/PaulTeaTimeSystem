@@ -1,5 +1,7 @@
 import { IOrder } from '../types/order'
 import Order from '../models/order'
+import { IParticipant } from '../types/participant'
+import order from '../models/order'
 
 interface OrderRepo {
   // 取得 Database 中的所有訂單
@@ -18,7 +20,10 @@ interface OrderRepo {
   getSpecificOrder(id: String): Promise<IOrder | null>
 
   // 根據邀請碼 invitationCode 來取得資訊
-  getSpecificOrderByInvtationCode(code: String): Promise<IOrder | null>
+  getSpecificOrderByInvitationCode(code: String): Promise<IOrder | null>
+
+  // 新增一個發起人or參與人的品項
+  addParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>
 }
 
 class OrderRepoImpl implements OrderRepo {
@@ -50,6 +55,13 @@ class OrderRepoImpl implements OrderRepo {
 
   async getSpecificOrderByInvitationCode(code: String): Promise<IOrder | null> {
     return Order.findOne({ invitationCode: Number(code) })
+  }
+
+  async addParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null> {
+    const order = await Order.findById(id)
+    order?.participant.push(participantBody)
+    order?.save()
+    return order
   }
 }
 

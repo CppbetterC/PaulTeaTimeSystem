@@ -79,8 +79,9 @@ var OrderRouter = function (server, opts, done) {
                     restaurant = _a.sent();
                     phase2 = request.body;
                     orderBody = {
+                        _id: phase2._id,
                         ownerID: phase2.ownerID,
-                        invitationCode: phase2.invitationCode,
+                        invitationCode: Math.floor(Math.random() * 100000) + 1,
                         authority: phase2.authority,
                         closeTimestamp: phase2.closeTimestamp,
                         restaurantID: (restaurant === null || restaurant === void 0 ? void 0 : restaurant._id) || '',
@@ -191,6 +192,33 @@ var OrderRouter = function (server, opts, done) {
                     error_6 = _a.sent();
                     return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
                 case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.post('/orders/search/:code/:pid', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var code, order, pid, participantBody, updatedOrder, error_7;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 4, , 5]);
+                    code = request.params.code;
+                    return [4 /*yield*/, orderRepo.getSpecificOrderByInvitationCode(code)];
+                case 1:
+                    order = _a.sent();
+                    pid = request.params.pid;
+                    participantBody = {
+                        PID: pid.toString(), items: request.body
+                    };
+                    if (!((order === null || order === void 0 ? void 0 : order._id) !== undefined)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, orderRepo.addParticipantItem(order._id, participantBody)];
+                case 2:
+                    updatedOrder = _a.sent();
+                    return [2 /*return*/, reply.status(201).send({ updatedOrder: updatedOrder })];
+                case 3: return [3 /*break*/, 5];
+                case 4:
+                    error_7 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 5: return [2 /*return*/];
             }
         });
     }); });
