@@ -75,6 +75,13 @@ var OrderRepoImpl = /** @class */ (function () {
             });
         });
     };
+    OrderRepoImpl.prototype.getSpecificOrder = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.findById(id)];
+            });
+        });
+    };
     return OrderRepoImpl;
 }());
 exports.OrderRepoImpl = OrderRepoImpl;

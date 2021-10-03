@@ -13,7 +13,9 @@ interface OrderRepo {
 
   // 根據訂單_id刪除訂單
   deleteOrder(id: String): Promise<IOrder | null>
-  
+
+  // 根據訂單_id來取得資訊
+  getSpecificOrder(id: String): Promise<IOrder | null>
 }
 
 class OrderRepoImpl implements OrderRepo {
@@ -37,6 +39,10 @@ class OrderRepoImpl implements OrderRepo {
 
   async deleteOrder(id: String): Promise<IOrder | null> {
     return Order.findByIdAndDelete(id)
+  }
+
+  async getSpecificOrder(id: String): Promise<IOrder | null> {
+    return Order.findById(id)
   }
 }
 

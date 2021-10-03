@@ -67,24 +67,24 @@ var OrderRouter = function (server, opts, done) {
                     _a.trys.push([0, 3, , 4]);
                     phase1 = request.body;
                     restaurantBody = {
-                        "_id": undefined,
-                        "restaurantName": phase1.restaurantName,
-                        "restaurantURL": phase1.restaurantURL,
-                        "restaurantMenu": phase1.restaurantMenu
+                        _id: undefined,
+                        restaurantName: phase1.restaurantName,
+                        restaurantURL: phase1.restaurantURL,
+                        restaurantMenu: phase1.restaurantMenu
                     };
                     return [4 /*yield*/, restaurantRepo.addRestaurant(restaurantBody)
-                        // (2) send order info to db 
+                        // (2) send order info to db
                     ];
                 case 1:
                     restaurant = _a.sent();
                     phase2 = request.body;
                     orderBody = {
-                        "ownerID": phase2.ownerID,
-                        "invitationCode": phase2.invitationCode,
-                        "authority": phase2.authority,
-                        "closeTimestamp": phase2.closeTimestamp,
-                        "restaurantID": (restaurant === null || restaurant === void 0 ? void 0 : restaurant._id) || "",
-                        "participant": phase2.participant
+                        ownerID: phase2.ownerID,
+                        invitationCode: phase2.invitationCode,
+                        authority: phase2.authority,
+                        closeTimestamp: phase2.closeTimestamp,
+                        restaurantID: (restaurant === null || restaurant === void 0 ? void 0 : restaurant._id) || '',
+                        participant: phase2.participant
                     };
                     return [4 /*yield*/, orderRepo.addOrder(orderBody)];
                 case 2:
@@ -141,6 +141,30 @@ var OrderRouter = function (server, opts, done) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_4 = _a.sent();
+                    return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    server.get('/orders/:id', function (request, reply) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, order, error_5;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    id = request.params.id;
+                    return [4 /*yield*/, orderRepo.getSpecificOrder(id)];
+                case 1:
+                    order = _a.sent();
+                    if (order) {
+                        return [2 /*return*/, reply.status(200).send({ order: order })];
+                    }
+                    else {
+                        return [2 /*return*/, reply.status(404).send({ msg: "Order #" + id + " Not Found" })];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_5 = _a.sent();
                     return [2 /*return*/, reply.status(500).send({ msg: 'Internal Server Error' })];
                 case 3: return [2 /*return*/];
             }

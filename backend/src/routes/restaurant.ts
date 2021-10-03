@@ -3,7 +3,6 @@ import { IRestaurant } from '../types/restaurant'
 import { RestaurantRepoImpl } from './../repo/restaurant-repo'
 
 const RestaurantRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done: (error?: Error) => void) => {
-
   const restaurantRepo = RestaurantRepoImpl.of()
 
   server.get('/restaurants', async (request, reply) => {
