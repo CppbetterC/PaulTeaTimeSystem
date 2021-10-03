@@ -24,6 +24,9 @@ interface OrderRepo {
 
   // 新增一個發起人or參與人的品項
   addParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>
+
+  // 更改一個發起人or參與人的品項中的價錢or數量
+  // updateParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>
 }
 
 class OrderRepoImpl implements OrderRepo {
@@ -63,6 +66,10 @@ class OrderRepoImpl implements OrderRepo {
     order?.save()
     return order
   }
+
+  // async updateParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>{
+  //     //Todo
+  // }
 }
 
 export { OrderRepoImpl }
