@@ -14,7 +14,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/orders"            
+              $ref: "#/components/schemas/orders"        
       responses:
         '201':
           description: create a new order
@@ -48,27 +48,42 @@ paths:
                 $ref: "#/components/responses/Internal Server Error"
 
             
-  /restaurants/{restaurant_name}:
+  /restaurants:
     get:
       tags:
-        - "發起人-搜尋相似餐廳"
+        - "發起人-回傳餐廳陣列從資料庫"
       description: ""
-      parameters:
-        - in: path
-          name: restaurant_name
-          schema: 
-            type: string
-          required: true
       responses:
         '200':
-          description: get the restaurant name by fuzzy search
-
+          description: get the restaurant array
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/restaurants"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
         # 補完responses
 
   /orders/search/{invitation_code}:
     get:
       tags:
-        - "發起人/參與人-取得指定編號的訂單資訊"
+        - "發起人/參與人-取得指定編號的全部訂單資訊"
       parameters:
         - in: path
           name: invitation_code
@@ -78,17 +93,89 @@ paths:
       responses:
         '200':
           description: get the infomation of the order with the invitation code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/orders"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
 
   /order/search/{invitation_code}/{participant_id}:
+    get:
+      tags:
+        - "發起人/參與人-操作品項於訂單"
+      parameters:
+        - in: path
+          name: invitation_code
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: participant_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: create the item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/participant"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
     post:
       tags:
-        - "發起人/參與人-更新品項於訂單"
+        - "發起人/參與人-操作品項於訂單"
+      parameters:
+        - in: path
+          name: invitation_code
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: participant_id
+          schema:
+            type: string
+          required: true
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref:  "#/components/schemas/orders"
+              $ref:  "#/components/schemas/participant"
       responses:
         '201':
           description: create the item
@@ -96,16 +183,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/orders"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
     put:
       tags:
-        - "發起人/參與人-更新品項於訂單"
+        - "發起人/參與人-操作品項於訂單"
       parameters:
         - in: path
           name: invitation_code
           schema:
             type: string
           required: true
-          description: update the info of the item in specfic order
+        - in: path
+          name: participant_id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  "#/components/schemas/participant"
       responses:
         '200':
           description: update the item
@@ -113,6 +222,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/orders"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound" 
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
 
   /orders/{orders_id}:
     get:
@@ -122,13 +243,35 @@ paths:
       description: ""
       parameters:
         - in: path
-          name: invitation_code
+          name: orders_id
           schema: 
               type: string
           required: true
       responses:
         '200':
           description: get the invitation code in the specfic order
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NotFound"    
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Internal Server Error"
 
 components:
   schemas:
@@ -150,27 +293,51 @@ components:
       required:
         - restaurantName
         - restaurantURL
-    items:
+
+    participant-items:
       type: object
       properties: 
         _id:
           type: string
         itemName:
           type: string
-        itemPrice:
-          type: integer
-        itemNumber:
+        orderedNum:
           type: integer
           default: 0
-        restaurantID:
+      required:
+        - itemName
+        - orderedNum
+
+    participant:
+      type: object
+      properties:
+        _id:
           type: string
-          $ref: "#/components/schemas/restaurants"
+        PID:
+          type: string
+        items:
+          type: object
+          $ref: "#/components/schemas/participant-items"
+      required:
+        - PID
+        - items
+
+    order-items:
+      type: object
+      properties:
+        _id:
+          type: string
+        itemName:
+          type: string
+        itemPrice:
+          type: string
       example:
         itemName: "珍奶全糖全冰"
         itemPrice: 90
       required:
         - itemName
-        - itemPrice        
+        - itemPrice
+
     orders:
       type: object
       properties:
@@ -183,6 +350,14 @@ components:
         authority:
           type: boolean
           default: false
+        orderStatus:
+          type: boolean
+          default: true
+        orderItem:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/order-items"
         closeTimestamp:
           type: string
         restaurantID:
@@ -192,16 +367,12 @@ components:
           type: array
           items:
             type: object
-            properties:
-              participantID:
-                type: string
-              items:
-                type: array
-                $ref: "#/components/schemas/items"
+            $ref: "#/components/schemas/participant"
+
       required:
         - ownerID
-        - invitationCode
-        - restaurantID
+        - restaurantName
+        - restaurantURL
 
     Error:
       type: object

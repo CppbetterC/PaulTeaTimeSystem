@@ -38,8 +38,9 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       const orderBody: IOrder = {
         _id: phase2._id,
         ownerID: phase2.ownerID,
-        invitationCode: Math.floor(Math.random() * 100000) + 1,
+        invitationCode: phase2.invitationCode,
         authority: phase2.authority,
+        // orderStatus: phase
         closeTimestamp: phase2.closeTimestamp,
         restaurantID: restaurant?._id || '',
         participant: phase2.participant
