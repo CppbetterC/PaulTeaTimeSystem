@@ -28,8 +28,8 @@ const orderItemSchema: Schema = new Schema({
     type: String,
     required: true
   },
-  itemNum: {
-    type: String,
+  itemPrice: {
+    type: Number,
     required: true
   }
 })

@@ -85,25 +85,72 @@ var OrderRepoImpl = /** @class */ (function () {
     OrderRepoImpl.prototype.getSpecificOrderByInvitationCode = function (code) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, order_1.default.findOne({ invitationCode: Number(code) })];
+                return [2 /*return*/, order_1.default.findOne({ invitationCode: code.toString() })];
             });
         });
     };
-    OrderRepoImpl.prototype.addParticipantItem = function (id, participantBody) {
+    OrderRepoImpl.prototype.addOrderItem = function (oid, items) {
         return __awaiter(this, void 0, void 0, function () {
-            var order;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, order_1.default.findById(id)];
-                    case 1:
-                        order = _a.sent();
-                        order === null || order === void 0 ? void 0 : order.participant.push(participantBody);
-                        order === null || order === void 0 ? void 0 : order.save();
-                        return [2 /*return*/, order];
-                }
+                return [2 /*return*/, order_1.default.findOneAndUpdate({ "_id": oid.toString() }, { "$push": { "orderItem": items } })];
+            });
+        });
+    };
+    OrderRepoImpl.prototype.addParticipantItem = function (oid, pid, items) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.findOneAndUpdate({
+                        "_id": oid.toString(),
+                        "participant": {
+                            "$elemMatch": {
+                                "PID": pid
+                            }
+                        }
+                    }, {
+                        "$push": {
+                            "participant.$[a].items": { "$each": [items] }
+                        }
+                    }, {
+                        "new": true,
+                        "arrayFilters": [
+                            { "a.PID": pid }
+                        ]
+                    })];
+            });
+        });
+    };
+    OrderRepoImpl.prototype.checkOrderItemExist = function (oid, name) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.find({
+                        "_id": oid.toString(),
+                        "orderItem": {
+                            "$elemMatch": {
+                                "itemName": name
+                            }
+                        }
+                    })];
+            });
+        });
+    };
+    OrderRepoImpl.prototype.checkParticipantExist = function (oid, pid) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, order_1.default.find({
+                        "_id": oid.toString(),
+                        "participant": {
+                            "$elemMatch": {
+                                "PID": pid
+                            }
+                        }
+                    })];
             });
         });
     };
     return OrderRepoImpl;
 }());
 exports.OrderRepoImpl = OrderRepoImpl;
+// const order = await Order.findById(id)
+// order?.participant.push(participantBody)
+// order?.save()
+// return order

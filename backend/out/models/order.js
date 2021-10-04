@@ -26,8 +26,8 @@ var orderItemSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    itemNum: {
-        type: String,
+    itemPrice: {
+        type: Number,
         required: true
     }
 });

@@ -2,6 +2,8 @@ import { IOrder } from '../types/order'
 import Order from '../models/order'
 import { IParticipant } from '../types/participant'
 import order from '../models/order'
+import { IParticipantItem } from '../types/participantItem'
+import { IOrderItem } from '../types/orderItem'
 
 interface OrderRepo {
   // 取得 Database 中的所有訂單
@@ -22,8 +24,14 @@ interface OrderRepo {
   // 根據邀請碼 invitationCode 來取得資訊
   getSpecificOrderByInvitationCode(code: String): Promise<IOrder | null>
 
+  // 新增至訂單選項表上
+  addOrderItem(oid: String, items: IOrderItem): Promise<IOrder | null>
+
   // 新增一個發起人or參與人的品項
-  addParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>
+  addParticipantItem(oid: String, pid: String, items: IParticipantItem): Promise<IOrder | null>
+
+  // 確認某參與者是否已經存在於某個訂單中的 participant array
+  checkParticipantExist(oid: String, pid: String): Promise<Array<IOrder>>
 
   // 更改一個發起人or參與人的品項中的價錢or數量
   // updateParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>
@@ -57,19 +65,75 @@ class OrderRepoImpl implements OrderRepo {
   }
 
   async getSpecificOrderByInvitationCode(code: String): Promise<IOrder | null> {
-    return Order.findOne({ invitationCode: Number(code) })
+    return Order.findOne({ invitationCode: code.toString() })
   }
 
-  async addParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null> {
-    const order = await Order.findById(id)
-    order?.participant.push(participantBody)
-    order?.save()
-    return order
+  async addOrderItem(oid: String, items: IOrderItem): Promise<IOrder | null>{
+    return Order.findOneAndUpdate(
+      {"_id": oid.toString()}, 
+      {"$push": {"orderItem": items}}
+    )
   }
 
+
+  async addParticipantItem(oid: String, pid: String, items: IParticipantItem): Promise<IOrder | null> {
+    return Order.findOneAndUpdate(
+      {
+        "_id": oid.toString(),
+        "participant": {
+          "$elemMatch": {
+            "PID": pid
+          }
+        }
+      },
+      {
+        "$push": {
+          "participant.$[a].items": {"$each": [items]}
+        }
+      }, 
+      {
+        "new": true,
+        "arrayFilters":[
+          {"a.PID": pid}
+        ]
+      }
+    )
+  }
+
+  async checkOrderItemExist(oid: String, name: String): Promise<Array<IOrder>>{
+    return Order.find(
+      {
+        "_id": oid.toString(),
+        "orderItem": {
+          "$elemMatch": {
+            "itemName": name
+          }
+        }
+      }
+    )
+  }
+
+  async checkParticipantExist(oid:String, pid: String): Promise<Array<IOrder>> {
+    return Order.find(
+      {
+        "_id": oid.toString(),
+        "participant": {
+          "$elemMatch": {
+            "PID": pid
+          }
+        }
+      }
+    )
+  }
   // async updateParticipantItem(id: String, participantBody: IParticipant): Promise<IOrder | null>{
   //     //Todo
   // }
 }
 
 export { OrderRepoImpl }
+
+
+// const order = await Order.findById(id)
+// order?.participant.push(participantBody)
+// order?.save()
+// return order
