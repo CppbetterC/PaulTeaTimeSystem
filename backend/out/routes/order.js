@@ -81,8 +81,9 @@ var OrderRouter = function (server, opts, done) {
                     orderBody = {
                         _id: phase2._id,
                         ownerID: phase2.ownerID,
-                        invitationCode: Math.floor(Math.random() * 100000) + 1,
+                        invitationCode: phase2.invitationCode,
                         authority: phase2.authority,
+                        // orderStatus: phase
                         closeTimestamp: phase2.closeTimestamp,
                         restaurantID: (restaurant === null || restaurant === void 0 ? void 0 : restaurant._id) || '',
                         participant: phase2.participant
@@ -207,7 +208,8 @@ var OrderRouter = function (server, opts, done) {
                     order = _a.sent();
                     pid = request.params.pid;
                     participantBody = {
-                        PID: pid.toString(), items: request.body
+                        PID: pid.toString(),
+                        items: request.body
                     };
                     if (!((order === null || order === void 0 ? void 0 : order._id) !== undefined)) return [3 /*break*/, 3];
                     return [4 /*yield*/, orderRepo.addParticipantItem(order._id, participantBody)];

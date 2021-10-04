@@ -1,25 +1,14 @@
 import { model, Schema } from 'mongoose'
 import { IOrder } from '../types/order'
 
-const itemSchema: Schema = new Schema({
+const participantItemSchema: Schema = new Schema({
   itemName: {
     type: String,
     required: true
   },
-  itemPrice: {
-    type: Number,
-    required: true
-  },
-  itemNumber: {
+  orderedNum: {
     type: Number,
     default: 0
-  },
-  restaurantID: {
-    type: Schema.Types.ObjectId,
-    ref: 'Restaurant'
-    // 假如這邊要設定為 required 的話
-    // 我們需要知道怎麼去抓到 restaurantID
-    // required: true
   }
 })
 
@@ -29,11 +18,22 @@ const participantSchema: Schema = new Schema({
     required: true
   },
   items: {
-    type: [itemSchema],
+    type: [participantItemSchema],
     required: true
   }
 })
-0
+
+const orderItemSchema: Schema = new Schema({
+  itemName: {
+    type: String,
+    required: true
+  },
+  itemNum: {
+    type: String,
+    required: true
+  }
+})
+
 const orderSchema: Schema = new Schema(
   {
     ownerID: {
@@ -48,6 +48,13 @@ const orderSchema: Schema = new Schema(
     authority: {
       type: Boolean,
       default: false
+    },
+    orderStatus: {
+      type: Boolean,
+      default: true
+    },
+    orderItem: {
+      type: [orderItemSchema]
     },
     closeTimestamp: {
       type: String

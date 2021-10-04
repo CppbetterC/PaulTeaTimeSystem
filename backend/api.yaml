@@ -316,8 +316,10 @@ components:
         PID:
           type: string
         items:
-          type: object
-          $ref: "#/components/schemas/participant-items"
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/participant-items"
       required:
         - PID
         - items
@@ -330,7 +332,7 @@ components:
         itemName:
           type: string
         itemPrice:
-          type: string
+          type: integer
       example:
         itemName: "珍奶全糖全冰"
         itemPrice: 90

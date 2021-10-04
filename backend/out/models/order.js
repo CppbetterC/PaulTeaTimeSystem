@@ -1,25 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
-var itemSchema = new mongoose_1.Schema({
+var participantItemSchema = new mongoose_1.Schema({
     itemName: {
         type: String,
         required: true
     },
-    itemPrice: {
-        type: Number,
-        required: true
-    },
-    itemNumber: {
+    orderedNum: {
         type: Number,
         default: 0
-    },
-    restaurantID: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Restaurant'
-        // 假如這邊要設定為 required 的話
-        // 我們需要知道怎麼去抓到 restaurantID
-        // required: true
     }
 });
 var participantSchema = new mongoose_1.Schema({
@@ -28,11 +17,20 @@ var participantSchema = new mongoose_1.Schema({
         required: true
     },
     items: {
-        type: [itemSchema],
+        type: [participantItemSchema],
         required: true
     }
 });
-0;
+var orderItemSchema = new mongoose_1.Schema({
+    itemName: {
+        type: String,
+        required: true
+    },
+    itemNum: {
+        type: String,
+        required: true
+    }
+});
 var orderSchema = new mongoose_1.Schema({
     ownerID: {
         type: String,
@@ -46,6 +44,13 @@ var orderSchema = new mongoose_1.Schema({
     authority: {
         type: Boolean,
         default: false
+    },
+    orderStatus: {
+        type: Boolean,
+        default: true
+    },
+    orderItem: {
+        type: [orderItemSchema]
     },
     closeTimestamp: {
         type: String

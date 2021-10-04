@@ -3,7 +3,7 @@ import { request } from 'http'
 import { IOrder } from '../types/order'
 import { IRestaurant } from '../types/restaurant'
 import { IdParams } from '../types/id'
-import { IItem } from '../types/item'
+import { IItem } from '../types/participantItem'
 import { OrderRepoImpl } from './../repo/order-repo'
 import { RestaurantRepoImpl } from './../repo/restaurant-repo'
 import { IParticipant } from '../types/participant'
@@ -114,14 +114,14 @@ const OrderRouter = (server: FastifyInstance, opts: RouteShorthandOptions, done:
       const code = request.params.code
       const order = await orderRepo.getSpecificOrderByInvitationCode(code)
       const pid = request.params.pid
-      const participantBody: IParticipant = { 
-        PID: pid.toString(), items: request.body as IItem 
+      const participantBody: IParticipant = {
+        PID: pid.toString(),
+        items: request.body as IItem
       }
       if (order?._id !== undefined) {
         const updatedOrder = await orderRepo.addParticipantItem(order._id, participantBody)
         return reply.status(201).send({ updatedOrder })
       }
-
     } catch (error) {
       return reply.status(500).send({ msg: 'Internal Server Error' })
     }

@@ -1,8 +1,8 @@
-import { IItem } from './item'
+import { IParticipantItem } from './participantItem'
 
 interface IParticipant {
   PID: string
-  items: IItem // item-sub-documentation
+  items: [IParticipantItem] // item-sub-documentation
 }
 
 export { IParticipant }
